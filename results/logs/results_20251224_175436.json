@@ -1,0 +1,58 @@
+[
+  {
+    "solver": "Exact (Brute Force)",
+    "instance": "Small Instance",
+    "distance": 264.13887564142317,
+    "time": 0.7685651779174805,
+    "num_cities": 10,
+    "tour_length": 10
+  },
+  {
+    "solver": "ACO (Ant Colony Optimization)",
+    "instance": "Small Instance",
+    "distance": 264.13887564142317,
+    "time": 0.12769126892089844,
+    "num_cities": 10,
+    "tour_length": 10
+  },
+  {
+    "solver": "SA (Simulated Annealing)",
+    "instance": "Small Instance",
+    "distance": 264.13887564142317,
+    "time": 0.0069997310638427734,
+    "num_cities": 10,
+    "tour_length": 10
+  },
+  {
+    "solver": "ACO (Ant Colony Optimization)",
+    "instance": "Medium Instance",
+    "distance": 570.3574348248827,
+    "time": 2.2234556674957275,
+    "num_cities": 50,
+    "tour_length": 50
+  },
+  {
+    "solver": "SA (Simulated Annealing)",
+    "instance": "Medium Instance",
+    "distance": 888.8572562341612,
+    "time": 0.019995927810668945,
+    "num_cities": 50,
+    "tour_length": 50
+  },
+  {
+    "solver": "ACO (Ant Colony Optimization)",
+    "instance": "Large Instance",
+    "distance": 905.109553595667,
+    "time": 6.999781131744385,
+    "num_cities": 100,
+    "tour_length": 100
+  },
+  {
+    "solver": "SA (Simulated Annealing)",
+    "instance": "Large Instance",
+    "distance": 1917.6162339303116,
+    "time": 0.03500056266784668,
+    "num_cities": 100,
+    "tour_length": 100
+  }
+]
