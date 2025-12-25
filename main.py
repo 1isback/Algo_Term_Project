@@ -429,6 +429,7 @@ def run_experiments():
 
 def main():
     """Main function."""
+    global NUM_RUNS
     import argparse
     
     parser = argparse.ArgumentParser(description="Neuro Courier Project - Enhanced TSP Solver")
@@ -441,7 +442,6 @@ def main():
     
     args = parser.parse_args()
     
-    global NUM_RUNS
     if args.runs:
         NUM_RUNS = args.runs
     

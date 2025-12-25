@@ -1,0 +1,8 @@
+Solver,Instance,Num_Runs,Mean_Distance,Std_Distance,Min_Distance,Max_Distance,Mean_Time,Std_Time,Approximation_Ratio
+Exact (Brute Force),Small Instance,1,264.14,0.00,264.14,264.14,0.90,0.00,1.0
+ACO (Ant Colony Optimization),Small Instance,5,264.14,0.00,264.14,264.14,0.20,0.03,1.0
+SA (Simulated Annealing),Small Instance,5,264.14,0.00,264.14,264.14,0.01,0.00,1.0
+ACO (Ant Colony Optimization),Medium Instance,5,567.57,1.94,565.80,570.05,2.10,0.04,None
+SA (Simulated Annealing),Medium Instance,5,933.45,53.95,881.66,1019.21,0.02,0.00,None
+ACO (Ant Colony Optimization),Large Instance,5,892.17,14.08,869.58,905.10,7.61,0.04,None
+SA (Simulated Annealing),Large Instance,5,2058.80,83.47,1952.23,2152.59,0.04,0.00,None
