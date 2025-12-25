@@ -39,7 +39,7 @@ Thumbs.db
 
 # Project specific
 # Keep data and results directories, but ignore large files if needed
-# data/*.json
-# results/plots/*.png
-# results/logs/*.json
-
+data/*.json
+results/plots/*.png
+results/logs/*.json
+results/logs/*.csv
