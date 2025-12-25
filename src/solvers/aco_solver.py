@@ -18,13 +18,15 @@ class ACOSolver:
                  beta: float = 2.0,   # Heuristic importance
                  evaporation_rate: float = 0.5,
                  q: float = 100.0,   # Pheromone deposit constant
-                 max_iterations: int = 100):
+                 max_iterations: int = 100,
+                 elitist_weight: float = 2.0):  # Elitist strategy weight
         self.num_ants = num_ants
         self.alpha = alpha
         self.beta = beta
         self.evaporation_rate = evaporation_rate
         self.q = q
         self.max_iterations = max_iterations
+        self.elitist_weight = elitist_weight
         
         self.pheromone_matrix = None
         self.distance_matrix = None
@@ -92,7 +94,7 @@ class ACOSolver:
             for j in range(n):
                 self.pheromone_matrix[i][j] *= (1.0 - self.evaporation_rate)
         
-        # Deposit pheromones
+        # Deposit pheromones for all ants
         for tour, distance in zip(tours, distances):
             if distance > 0:
                 pheromone_deposit = self.q / distance
@@ -101,6 +103,19 @@ class ACOSolver:
                     j = tour[(k + 1) % len(tour)]
                     self.pheromone_matrix[i][j] += pheromone_deposit
                     self.pheromone_matrix[j][i] += pheromone_deposit
+        
+        # Elitist strategy: Extra pheromone for best tour
+        if distances:
+            best_idx = distances.index(min(distances))
+            best_tour = tours[best_idx]
+            best_distance = distances[best_idx]
+            if best_distance > 0:
+                elite_deposit = self.q * self.elitist_weight / best_distance
+                for k in range(len(best_tour)):
+                    i = best_tour[k]
+                    j = best_tour[(k + 1) % len(best_tour)]
+                    self.pheromone_matrix[i][j] += elite_deposit
+                    self.pheromone_matrix[j][i] += elite_deposit
     
     def solve(self, cities: List[City], seed: int = None) -> Tuple[List[int], float, List[float]]:
         """

@@ -47,12 +47,38 @@ class SASolver:
         new_tour[i:j+1] = reversed(new_tour[i:j+1])
         return new_tour
     
+    def _two_opt_swap(self, tour: List[int]) -> List[int]:
+        """2-opt neighborhood move: Reverse a segment between two edges."""
+        new_tour = tour.copy()
+        n = len(tour)
+        if n < 4:
+            return new_tour
+        
+        i = random.randint(0, n - 2)
+        j = random.randint(i + 2, n)
+        if j >= n:
+            j = (i + 2) % n
+            if j <= i:
+                j = i + 2
+        
+        # Reverse segment between i and j
+        if j > i and j < n:
+            new_tour[i:j] = list(reversed(new_tour[i:j]))
+        else:
+            # Fallback to reverse segment
+            return self._reverse_segment(tour)
+        
+        return new_tour
+    
     def _get_neighbor(self, tour: List[int]) -> List[int]:
         """Generate a neighbor solution using random mutation."""
-        if random.random() < 0.5:
+        rand = random.random()
+        if rand < 0.33:
             return self._swap_two_cities(tour)
-        else:
+        elif rand < 0.66:
             return self._reverse_segment(tour)
+        else:
+            return self._two_opt_swap(tour)
     
     def solve(self, cities: List[City], seed: int = None) -> Tuple[List[int], float, List[float]]:
         """

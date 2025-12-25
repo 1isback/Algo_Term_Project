@@ -34,9 +34,23 @@ def calculate_tour_distance(cities: List[City], tour: List[int]) -> float:
     
     Returns:
         Total distance of the tour
+    
+    Raises:
+        ValueError: If tour contains invalid indices or cities list is empty
     """
+    if not cities:
+        raise ValueError("Cities list cannot be empty")
+    
+    if not tour:
+        return 0.0
+    
     if len(tour) < 2:
         return 0.0
+    
+    # Validate indices
+    for idx in tour:
+        if idx < 0 or idx >= len(cities):
+            raise ValueError(f"Invalid city index {idx}. Must be between 0 and {len(cities)-1}")
     
     total_distance = 0.0
     for i in range(len(tour)):
@@ -61,7 +75,19 @@ def plot_tour(cities: List[City],
         title: Plot title
         save_path: Path to save the plot (optional)
         show: Whether to display the plot
+    
+    Raises:
+        ValueError: If cities list is empty or tour is invalid
     """
+    if not cities:
+        raise ValueError("Cities list cannot be empty")
+    
+    if not tour:
+        raise ValueError("Tour cannot be empty")
+    
+    if len(tour) != len(cities):
+        raise ValueError(f"Tour length ({len(tour)}) must match number of cities ({len(cities)})")
+    
     fig, ax = plt.subplots(figsize=(12, 8))
     
     # Extract coordinates
