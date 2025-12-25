@@ -102,7 +102,7 @@ class ACOSolver:
                     self.pheromone_matrix[i][j] += pheromone_deposit
                     self.pheromone_matrix[j][i] += pheromone_deposit
     
-    def solve(self, cities: List[City], seed: int = None) -> Tuple[List[int], float]:
+    def solve(self, cities: List[City], seed: int = None) -> Tuple[List[int], float, List[float]]:
         """
         Solve TSP using Ant Colony Optimization.
         
@@ -111,18 +111,20 @@ class ACOSolver:
             seed: Random seed for reproducibility
         
         Returns:
-            Tuple of (best_tour, best_distance)
+            Tuple of (best_tour, best_distance, history)
+            history: List of best_distance values at each iteration
         """
         if seed is not None:
             random.seed(seed)
         
         n = len(cities)
         if n < 2:
-            return [0], 0.0
+            return [0], 0.0, [0.0]
         
         self._initialize_matrices(cities)
         self.best_tour = None
         self.best_distance = float('inf')
+        history = []  # Track best distance at each iteration
         
         for iteration in range(self.max_iterations):
             tours = []
@@ -142,11 +144,14 @@ class ACOSolver:
                     self.best_distance = distance
                     self.best_tour = tour.copy()
             
+            # Record best distance for this iteration
+            history.append(self.best_distance)
+            
             # Update pheromones
             self._update_pheromones(tours, distances, cities)
             
             if (iteration + 1) % 10 == 0:
                 print(f"  Iteration {iteration + 1}/{self.max_iterations}, Best distance: {self.best_distance:.2f}")
         
-        return self.best_tour, self.best_distance
+        return self.best_tour, self.best_distance, history
 

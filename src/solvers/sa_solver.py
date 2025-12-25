@@ -54,7 +54,7 @@ class SASolver:
         else:
             return self._reverse_segment(tour)
     
-    def solve(self, cities: List[City], seed: int = None) -> Tuple[List[int], float]:
+    def solve(self, cities: List[City], seed: int = None) -> Tuple[List[int], float, List[float]]:
         """
         Solve TSP using Simulated Annealing.
         
@@ -63,14 +63,15 @@ class SASolver:
             seed: Random seed for reproducibility
         
         Returns:
-            Tuple of (best_tour, best_distance)
+            Tuple of (best_tour, best_distance, history)
+            history: List of best_distance values at each iteration
         """
         if seed is not None:
             random.seed(seed)
         
         n = len(cities)
         if n < 2:
-            return [0], 0.0
+            return [0], 0.0, [0.0]
         
         # Initialize
         current_tour = self._generate_initial_solution(n)
@@ -81,6 +82,7 @@ class SASolver:
         
         temperature = self.initial_temperature
         iteration = 0
+        history = []  # Track best distance at each iteration
         
         while temperature > self.min_temperature and iteration < self.max_iterations:
             # Generate neighbor
@@ -98,6 +100,9 @@ class SASolver:
                     self.best_tour = current_tour.copy()
                     self.best_distance = current_distance
             
+            # Record best distance for this iteration
+            history.append(self.best_distance)
+            
             # Cool down
             temperature *= self.cooling_rate
             iteration += 1
@@ -105,5 +110,5 @@ class SASolver:
             if iteration % 1000 == 0:
                 print(f"  Iteration {iteration}, Temperature: {temperature:.2f}, Best distance: {self.best_distance:.2f}")
         
-        return self.best_tour, self.best_distance
+        return self.best_tour, self.best_distance, history
 
