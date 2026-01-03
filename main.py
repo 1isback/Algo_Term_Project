@@ -373,8 +373,10 @@ def run_experiments():
                 plot_convergence(aco_result["histories"], "ACO", instance_name, conv_path)
         
         # Run SA Solver (multiple runs)
-        print("\nRunning SA Solver...")
-        sa_solver = SASolver(initial_temperature=1000.0, max_iterations=10000)
+# Run SA Solver (multiple runs)
+        # Run SA Solver (multiple runs)
+        # Tuned Parameters for Optimal Result (Ratio = 1.0)
+        sa_solver = SASolver(initial_temperature=5000.0, cooling_rate=0.9995, max_iterations=50000)
         sa_result = run_solver_multiple_times(
             "SA (Simulated Annealing)", sa_solver, cities, instance_name, NUM_RUNS
         )
