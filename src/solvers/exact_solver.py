@@ -1,6 +1,7 @@
 """
 Brute Force (Exact) Solver for TSP.
 Only suitable for small instances (typically ≤ 21 cities).
+Bu dosya yerine ilp ile yazilmis optimized versiyon kullanilacaktir o cok daha hizli exact solutioni bulmaktadir.
 """
 
 import itertools
