@@ -13,10 +13,10 @@ class SASolver:
     """Simulated Annealing solver for TSP."""
     
     def __init__(self,
-                 initial_temperature: float = 1000.0,
-                 cooling_rate: float = 0.995,
+                 initial_temperature: float = 5000.0,
+                 cooling_rate: float = 0.9995,
                  min_temperature: float = 0.1,
-                 max_iterations: int = 10000):
+                 max_iterations: int = 50000):
         self.initial_temperature = initial_temperature
         self.cooling_rate = cooling_rate
         self.min_temperature = min_temperature
