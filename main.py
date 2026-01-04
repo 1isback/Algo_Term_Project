@@ -268,11 +268,33 @@ def save_results_json(all_results: List[Dict], filename: str):
     print(f"✓ JSON results saved to {filepath}")
 
 
+def load_exact_solutions():
+    """Load exact solutions from JSON file."""
+    exact_solutions_file = "data/exact_solutions.json"
+    
+    if not os.path.exists(exact_solutions_file):
+        print(f"\n⚠ Warning: {exact_solutions_file} not found.")
+        print("  Run 'python compute_exact_solutions.py' first to compute exact solutions.")
+        return {}
+    
+    try:
+        with open(exact_solutions_file, 'r', encoding='utf-8') as f:
+            exact_solutions = json.load(f)
+        print(f"\n✓ Loaded exact solutions from {exact_solutions_file}")
+        return exact_solutions
+    except Exception as e:
+        print(f"\n⚠ Error loading exact solutions: {e}")
+        return {}
+
+
 def run_experiments():
     """Run comprehensive experiments with multiple runs, statistics, and plots."""
     print("\n" + "=" * 60)
     print("NEURO COURIER PROJECT - ENHANCED TSP SOLVER EXPERIMENTS")
     print("=" * 60)
+    
+    # Load exact solutions
+    exact_solutions = load_exact_solutions()
     
     instances = {
         "small": ("data/small_instances.json", "Small Instance"),
@@ -281,7 +303,6 @@ def run_experiments():
     }
     
     all_results = []
-    exact_optimal = None  # Store optimal solution for approximation ratio
     
     for instance_key, (filepath, instance_name) in instances.items():
         if not os.path.exists(filepath):
@@ -296,53 +317,57 @@ def run_experiments():
         cities = map_instance.cities
         print(f"  Loaded {len(cities)} cities")
         
-        # Run Exact Solver (only for small instances, single run)
-        if instance_key == "small":
-            print("\nRunning Exact Solver (single run, optimal solution)...")
-            exact_solver = ExactSolver()
-            start_time = time.time()
-            result = exact_solver.solve(cities)
-            elapsed_time = time.time() - start_time
-            
-            if len(result) == 3:
-                tour, distance, _ = result
-            else:
-                tour, distance = result
-            
-            if tour is not None:
-                exact_optimal = distance
-                print(f"  ✓ Optimal distance: {distance:.2f}")
+        # Get exact solution from loaded data
+        exact_optimal = None
+        exact_tour = None
+        exact_time = None
+        
+        if instance_key in exact_solutions:
+            exact_data = exact_solutions[instance_key]
+            if exact_data.get("status") == "success" and exact_data.get("optimal_distance") is not None:
+                exact_optimal = exact_data["optimal_distance"]
+                exact_tour = exact_data.get("optimal_tour")
+                exact_time = exact_data.get("computation_time", 0.0)
+                print(f"\n✓ Using pre-computed exact solution: {exact_optimal:.2f}")
                 
-                # Save exact solver result
+                # Add exact solver result to results
                 all_results.append({
                     "solver": "Exact (Brute Force)",
                     "instance": instance_name,
                     "num_runs": 1,
-                    "distances": [distance],
-                    "times": [elapsed_time],
-                    "tours": [tour],
+                    "distances": [exact_optimal],
+                    "times": [exact_time],
+                    "tours": [exact_tour] if exact_tour else [[]],
                     "histories": [[]],
-                    "best_tour": tour,
-                    "best_distance": distance,
-                    "best_time": elapsed_time,
+                    "best_tour": exact_tour if exact_tour else [],
+                    "best_distance": exact_optimal,
+                    "best_time": exact_time,
                     "best_history": [],
                     "stats": {
-                        "mean_distance": distance,
+                        "mean_distance": exact_optimal,
                         "std_distance": 0.0,
-                        "min_distance": distance,
-                        "max_distance": distance,
-                        "mean_time": elapsed_time,
+                        "min_distance": exact_optimal,
+                        "max_distance": exact_optimal,
+                        "mean_time": exact_time,
                         "std_time": 0.0
                     },
                     "approximation_ratio": 1.0
                 })
                 
-                # Plot exact solution
-                os.makedirs("results/plots", exist_ok=True)
-                plot_path = f"results/plots/exact_{instance_key}.png"
-                plot_tour(cities, tour,
-                          title=f"Exact Solver - {instance_name}\nOptimal Distance: {distance:.2f}",
-                          save_path=plot_path, show=False)
+                # Plot exact solution if tour is available
+                if exact_tour:
+                    os.makedirs("results/plots", exist_ok=True)
+                    plot_path = f"results/plots/exact_{instance_key}.png"
+                    plot_tour(cities, exact_tour,
+                              title=f"Exact Solver - {instance_name}\nOptimal Distance: {exact_optimal:.2f}",
+                              save_path=plot_path, show=False)
+            elif exact_data.get("status") == "too_large":
+                print(f"\n⚠ Instance too large for exact solver (optimal not available)")
+            else:
+                print(f"\n⚠ Exact solution not available for this instance")
+        else:
+            print(f"\n⚠ Exact solution not found in data/exact_solutions.json")
+            print(f"  Run 'python compute_exact_solutions.py' to compute exact solutions")
         
         # Run ACO Solver (multiple runs)
         print("\nRunning ACO Solver...")
@@ -353,7 +378,7 @@ def run_experiments():
         
         if aco_result:
             # Calculate approximation ratio if we have optimal
-            if exact_optimal and instance_key == "small":
+            if exact_optimal is not None:
                 aco_result["approximation_ratio"] = aco_result["stats"]["mean_distance"] / exact_optimal
             else:
                 aco_result["approximation_ratio"] = None
@@ -383,7 +408,7 @@ def run_experiments():
         
         if sa_result:
             # Calculate approximation ratio if we have optimal
-            if exact_optimal and instance_key == "small":
+            if exact_optimal is not None:
                 sa_result["approximation_ratio"] = sa_result["stats"]["mean_distance"] / exact_optimal
             else:
                 sa_result["approximation_ratio"] = None

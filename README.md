@@ -42,7 +42,7 @@ pip install -r requirements.txt
 
 ## Usage
 
-### Generate TSP Instances
+### Step 1: Generate TSP Instances
 
 Generate small, medium, and large TSP instances:
 
@@ -55,13 +55,33 @@ This creates three JSON files in the `data/` directory:
 - `medium_instances.json` (50 cities)
 - `large_instances.json` (100 cities)
 
-### Run Experiments
+### Step 2: Compute Exact Solutions (Optional but Recommended)
+
+Compute exact optimal solutions for approximation ratio calculations:
+
+```bash
+python compute_exact_solutions.py
+```
+
+This script:
+- Calculates optimal solutions using brute force for all instances (where feasible)
+- Saves results to `data/exact_solutions.json`
+- Only computes for instances with ≤12 cities (larger instances marked as "too_large")
+
+**Note:** This step is optional but recommended. If skipped, approximation ratios will show as "N/A" in results.
+
+### Step 3: Run Experiments
 
 Run all solvers on all instances with multiple runs:
 
 ```bash
 python main.py --run
 ```
+
+The script will:
+- Load exact solutions from `data/exact_solutions.json` if available
+- Calculate approximation ratios for all instances with exact solutions
+- Generate plots and CSV/JSON results
 
 ### Custom Number of Runs
 
