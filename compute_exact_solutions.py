@@ -41,7 +41,7 @@ def compute_exact_solutions():
         print(f"  Loaded {n} cities")
         
         # Check if instance is too large for exact solver
-        if n > 12:
+        if n > 15:
             print(f"  ⚠ Instance too large ({n} cities) for exact solver (max 12)")
             print(f"  → Exact solution will not be computed")
             exact_solutions[instance_key] = {
