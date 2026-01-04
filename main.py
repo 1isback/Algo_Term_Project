@@ -22,7 +22,7 @@ import numpy as np
 from src.models import Map
 from src.generator import generate_map
 from src.utils import plot_tour, calculate_tour_distance
-from src.solvers.exact_solver import ExactSolver
+from src.solvers.optimized_exact_solver import calculate_distance_matrix, solve_tsp_ilp
 from src.solvers.aco_solver import ACOSolver
 from src.solvers.sa_solver import SASolver
 
@@ -336,23 +336,21 @@ def run_experiments():
                 # Try to compute if instance is small enough
                 if n <= 21:
                     print(f"\n⚠ Pre-computed exact solution failed, computing now with optimized exact solver...")
-                    solver = ExactSolver()
+                    # Convert City objects to dict format for optimized solver
+                    cities_dict = [city.to_dict() for city in cities]
+                    dist_matrix = calculate_distance_matrix(cities_dict)
+                    
                     start_time = time.time()
-                    result = solver.solve(cities)
+                    tour, distance, status, model = solve_tsp_ilp(dist_matrix)
                     elapsed_time = time.time() - start_time
                     
-                    if len(result) == 3:
-                        tour, distance, _ = result
-                    else:
-                        tour, distance = result
-                    
-                    if tour is not None:
+                    if tour is not None and distance is not None:
                         exact_optimal = distance
                         exact_tour = tour
                         exact_time = elapsed_time
                         print(f"  ✓ Computed exact solution: {exact_optimal:.2f} (Time: {exact_time:.2f}s)")
                     else:
-                        print(f"  ✗ Failed to compute exact solution")
+                        print(f"  ✗ Failed to compute exact solution (Status: {status})")
                 else:
                     print(f"\n⚠ Exact solution not available for this instance")
         else:
@@ -360,23 +358,21 @@ def run_experiments():
             if n <= 21:
                 print(f"\n⚠ Exact solution not found in data/exact_solutions.json")
                 print(f"  Computing with optimized exact solver...")
-                solver = ExactSolver()
+                # Convert City objects to dict format for optimized solver
+                cities_dict = [city.to_dict() for city in cities]
+                dist_matrix = calculate_distance_matrix(cities_dict)
+                
                 start_time = time.time()
-                result = solver.solve(cities)
+                tour, distance, status, model = solve_tsp_ilp(dist_matrix)
                 elapsed_time = time.time() - start_time
                 
-                if len(result) == 3:
-                    tour, distance, _ = result
-                else:
-                    tour, distance = result
-                
-                if tour is not None:
+                if tour is not None and distance is not None:
                     exact_optimal = distance
                     exact_tour = tour
                     exact_time = elapsed_time
                     print(f"  ✓ Computed exact solution: {exact_optimal:.2f} (Time: {exact_time:.2f}s)")
                 else:
-                    print(f"  ✗ Failed to compute exact solution")
+                    print(f"  ✗ Failed to compute exact solution (Status: {status})")
             else:
                 print(f"\n⚠ Exact solution not found in data/exact_solutions.json")
                 print(f"  Instance too large ({n} cities, max 21) to compute exact solution")

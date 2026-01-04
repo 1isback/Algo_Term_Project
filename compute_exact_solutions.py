@@ -1,6 +1,6 @@
 """
 Compute Exact Solutions for All Instances
-This script calculates optimal solutions using brute force for all instances
+This script calculates optimal solutions using optimized ILP solver for all instances
 and saves them for later use in approximation ratio calculations.
 """
 
@@ -8,7 +8,7 @@ import os
 import json
 import time
 from src.models import Map
-from src.solvers.exact_solver import ExactSolver
+from src.solvers.optimized_exact_solver import calculate_distance_matrix, solve_tsp_ilp
 
 
 def compute_exact_solutions():
@@ -53,18 +53,19 @@ def compute_exact_solutions():
             }
             continue
         
-        print(f"  Computing exact solution (brute force)...")
-        solver = ExactSolver()
+        print(f"  Computing exact solution (optimized ILP solver)...")
+        # Convert City objects to dict format for optimized solver
+        cities_dict = [city.to_dict() for city in cities]
+        
+        # Calculate distance matrix
+        dist_matrix = calculate_distance_matrix(cities_dict)
+        
+        # Solve using ILP
         start_time = time.time()
-        result = solver.solve(cities)
+        tour, distance, status, model = solve_tsp_ilp(dist_matrix)
         elapsed_time = time.time() - start_time
         
-        if len(result) == 3:
-            tour, distance, _ = result
-        else:
-            tour, distance = result
-        
-        if tour is not None:
+        if tour is not None and distance is not None:
             exact_solutions[instance_key] = {
                 "instance": instance_name,
                 "num_cities": n,
