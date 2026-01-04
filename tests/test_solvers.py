@@ -21,7 +21,7 @@ class TestExactSolver(unittest.TestCase):
         self.assertEqual(len(history), 0)  # No iterations for brute force
     
     def test_exact_solver_too_large(self):
-        cities = [City(f"C{i}", i, i) for i in range(15)]
+        cities = [City(f"C{i}", i, i) for i in range(22)]  # 22 > 21 limit
         solver = ExactSolver()
         tour, dist, history = solver.solve(cities)
         self.assertIsNone(tour)
