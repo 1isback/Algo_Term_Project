@@ -1,5 +1,5 @@
 import json
-import time
+import time as time_module
 import numpy as np
 from pulp import *
 
@@ -169,11 +169,11 @@ def main():
     
     # TSP'yi çöz
     print("\n3. ILP ile exact solution bulunuyor...")
-    start_time = time.time()
+    start_time = time_module.time()
     
     tour, total_distance, status, model = solve_tsp_ilp(dist_matrix)
     
-    solve_time = time.time() - start_time
+    solve_time = time_module.time() - start_time
     
     # Sonuçları göster
     print(f"\n{'='*70}")
