@@ -32,7 +32,7 @@ class ExactSolver:
         if n < 2:
             return [0], 0.0, [0.0]
         
-        if n > 12:
+        if n > 15:
             print(f"Warning: Brute force is too slow for {n} cities. Consider using heuristic methods.")
             return None, float('inf'), []
         
