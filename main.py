@@ -472,23 +472,24 @@ def run_experiments():
     save_results_json(all_results, f"results_{timestamp}.json")
     
     # Print summary
-    print("\n" + "=" * 80)
+    print("\n" + "=" * 120)
     print("EXPERIMENT SUMMARY")
-    print("=" * 80)
-    print(f"{'Solver':<30} | {'Instance':<20} | {'Mean Dist':<12} | {'Min Dist':<12} | "
-          f"{'Approx Ratio':<12} | {'Mean Time':<10}")
-    print("-" * 80)
+    print("=" * 120)
+    print(f"{'Instance':<20} | {'Solver':<30} | {'Mean Distance':<15} | {'Std Distance':<15} | "
+          f"{'Min Distance':<15} | {'Mean Time (s)':<15} | {'Approximation Ratio':<20}")
+    print("-" * 120)
     
     for result in all_results:
         if result is None:
             continue
         
         approx_ratio_str = f"{result.get('approximation_ratio', 0):.3f}" if result.get('approximation_ratio') else "N/A"
-        print(f"{result['solver']:<30} | {result['instance']:<20} | "
-              f"{result['stats']['mean_distance']:>10.2f} | {result['stats']['min_distance']:>10.2f} | "
-              f"{approx_ratio_str:>12} | {result['stats']['mean_time']:>8.2f}s")
+        print(f"{result['instance']:<20} | {result['solver']:<30} | "
+              f"{result['stats']['mean_distance']:>13.2f} | {result['stats']['std_distance']:>13.2f} | "
+              f"{result['stats']['min_distance']:>13.2f} | {result['stats']['mean_time']:>13.2f} | "
+              f"{approx_ratio_str:>20}")
     
-    print("=" * 80)
+    print("=" * 120)
     print(f"\n✓ All results saved to results/logs/")
     print(f"✓ All plots saved to results/plots/")
 
