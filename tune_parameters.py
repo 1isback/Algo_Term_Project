@@ -174,7 +174,7 @@ def main():
     if not os.path.exists(test_file):
         print("\nGenerating test instance...")
         os.makedirs("data", exist_ok=True)
-        test_map = generate_map(num_cities=10, seed=42, name="Tuning_Test")
+        test_map = generate_map(num_cities=20, seed=42, name="Tuning_Test")
         test_map.save_to_json(test_file)
     
     map_instance = Map.load_from_json(test_file)

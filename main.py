@@ -40,8 +40,8 @@ def generate_instances():
     
     os.makedirs("data", exist_ok=True)
     
-    print("\nGenerating small instance (10 cities)...")
-    small_map = generate_map(num_cities=10, seed=42, name="Small_Instance")
+    print("\nGenerating small instance (20 cities)...")
+    small_map = generate_map(num_cities=20, seed=42, name="Small_Instance")
     small_map.save_to_json("data/small_instances.json")
     print(f"  Saved: data/small_instances.json ({len(small_map)} cities)")
     
