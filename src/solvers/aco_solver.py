@@ -13,9 +13,9 @@ class ACOSolver:
     """Ant Colony Optimization solver for TSP."""
     
     def __init__(self, 
-                 num_ants: int = 50,
+                 num_ants: int = 30,
                  alpha: float = 1.0,  # Pheromone importance
-                 beta: float = 2.0,   # Heuristic importance
+                 beta: float = 3.0,   # Heuristic importance
                  evaporation_rate: float = 0.5,
                  q: float = 100.0,   # Pheromone deposit constant
                  max_iterations: int = 100,
