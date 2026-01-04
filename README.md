@@ -4,6 +4,7 @@ A Traveling Salesman Problem (TSP) solver project implementing multiple algorith
 
 ## Project Structure
 
+```
 ALGO_TERM_PROJECT/
 │
 ├── .venv/                              # Python Virtual Environment
@@ -46,6 +47,7 @@ ALGO_TERM_PROJECT/
 ├── requirements.txt                    # Dependencies
 ├── scalability_analysis.py             # Script for performance/size analysis
 └── tune_parameters.py                  # Script for hyperparameter tuning
+```
 
 ## Installation
 
