@@ -15,7 +15,7 @@ import numpy as np
 
 from src.models import Map
 from src.generator import generate_map
-from src.solvers.exact_solver import ExactSolver
+from src.solvers.optimized_exact_solver import calculate_distance_matrix, solve_tsp_ilp
 from src.solvers.aco_solver import ACOSolver
 from src.solvers.sa_solver import SASolver
 
@@ -44,19 +44,22 @@ def analyze_scalability(sizes: List[int], num_runs: int = 3):
         
         results["sizes"].append(size)
         
-        # Test Exact Solver (only for small sizes)
-        if size <= 10:
-            print("\nTesting Exact Solver...")
+        # Test Exact Solver (Optimized ILP - only for small sizes, max 21 cities)
+        if size <= 21:
+            print("\nTesting Exact Solver (Optimized ILP)...")
             exact_times = []
             exact_distances = []
             
+            # Convert City objects to dict format for optimized solver
+            cities_dict = [city.to_dict() for city in cities]
+            dist_matrix = calculate_distance_matrix(cities_dict)
+            
             for run in range(num_runs):
-                solver = ExactSolver()
                 start_time = time.time()
-                tour, distance, _ = solver.solve(cities)
+                tour, distance, status, model = solve_tsp_ilp(dist_matrix)
                 elapsed_time = time.time() - start_time
                 
-                if tour is not None:
+                if tour is not None and distance is not None:
                     exact_times.append(elapsed_time)
                     exact_distances.append(distance)
             
@@ -220,8 +223,8 @@ def save_scalability_results(results: Dict):
 
 def main():
     """Main function."""
-    # Test sizes: small to medium
-    sizes = [5, 10, 15, 20, 30, 40, 50]
+    # Test sizes: small to medium (exact solver works up to 21 cities)
+    sizes = [5, 10, 15, 20, 21, 30, 40, 50]
     
     print("\nStarting scalability analysis...")
     print(f"Testing sizes: {sizes}")
