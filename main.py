@@ -13,7 +13,6 @@ import json
 import csv
 import statistics
 from datetime import datetime
-from pathlib import Path
 from typing import Dict, List, Tuple
 
 import matplotlib.pyplot as plt
@@ -439,8 +438,6 @@ def run_experiments():
                 conv_path = f"results/plots/aco_{instance_key}_convergence.png"
                 plot_convergence(aco_result["histories"], "ACO", instance_name, conv_path)
         
-        # Run SA Solver (multiple runs)
-# Run SA Solver (multiple runs)
         # Run SA Solver (multiple runs)
         # Tuned Parameters for Optimal Result (Ratio = 1.0)
         sa_solver = SASolver(initial_temperature=5000.0, cooling_rate=0.9995, max_iterations=50000)

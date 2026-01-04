@@ -8,7 +8,7 @@ A Traveling Salesman Problem (TSP) solver project implementing multiple algorith
 neuro_courier_project/
 │
 ├── data/                       # Generated map data
-│   ├── small_instances.json    # 10 cities
+│   ├── small_instances.json    # 20 cities
 │   ├── medium_instances.json   # 50 cities
 │   └── large_instances.json    # 100 cities
 │
