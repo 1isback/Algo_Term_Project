@@ -4,32 +4,48 @@ A Traveling Salesman Problem (TSP) solver project implementing multiple algorith
 
 ## Project Structure
 
-```
-neuro_courier_project/
+ALGO_TERM_PROJECT/
 │
-├── data/                       # Generated map data
-│   ├── small_instances.json    # 20 cities
-│   ├── medium_instances.json   # 50 cities
-│   └── large_instances.json    # 100 cities
+├── .venv/                              # Python Virtual Environment
 │
-├── results/                    # Experiment results
-│   ├── plots/                  # Route visualizations (.png)
-│   └── logs/                   # Result tables (distance, time, etc.)
+├── data/                               # Dataset files
+│   ├── exact_solutions.json
+│   ├── large_instances.json
+│   ├── medium_instances.json
+│   └── small_instances.json
 │
-├── src/                        # Source code
-│   ├── models.py               # City and Map classes
-│   ├── generator.py            # Random city generator
-│   ├── utils.py                # Distance calculation and plotting
+├── results/                            # Experiment results
+│   ├── logs/
+│   ├── plots/
+│   └── Small_Instance_exact_solution.json
+│
+├── src/                                # Source code package
+│   ├── solvers/                        # TSP Algorithms
+│   │   ├── __init__.py
+│   │   ├── aco_solver.py               # Ant Colony Optimization
+│   │   ├── exact_solver.py             # Brute Force / Naive Exact
+│   │   ├── optimized_exact_solver.py   # Improved Exact Solver
+│   │   └── sa_solver.py                # Simulated Annealing
 │   │
-│   └── solvers/                # TSP solving algorithms
-│       ├── exact_solver.py     # Brute Force (exact solution)
-│       ├── aco_solver.py       # Ant Colony Optimization
-│       └── sa_solver.py         # Simulated Annealing
+│   ├── __init__.py                     # Makes 'src' a package
+│   ├── generator.py                    # Map generator
+│   ├── models.py                       # Data models (City, Map)
+│   └── utils.py                        # Helper functions
 │
-├── main.py                     # Main entry point
-├── requirements.txt            # Required libraries
-└── README.md                   # This file
-```
+├── tests/                              # Unit tests
+│   ├── __init__.py
+│   ├── test_generator.py           
+│   ├── test_models.py              
+│   ├── test_solvers.py             
+│   └── test_utils.py               
+│
+├── .gitignore                          # Git ignore rules
+├── compute_exact_solutions.py          # Script to pre-compute ground truths
+├── main.py                             # Main application entry point
+├── README.md                           # Project documentation
+├── requirements.txt                    # Dependencies
+├── scalability_analysis.py             # Script for performance/size analysis
+└── tune_parameters.py                  # Script for hyperparameter tuning
 
 ## Installation
 
