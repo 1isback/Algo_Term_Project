@@ -15,7 +15,7 @@ class SASolver:
     def __init__(self,
                  initial_temperature: float = 5000.0,
                  cooling_rate: float = 0.9995,
-                 min_temperature: float = 0.1,
+                 min_temperature: float = 0.001,
                  max_iterations: int = 50000):
         self.initial_temperature = initial_temperature
         self.cooling_rate = cooling_rate
