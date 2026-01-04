@@ -1,6 +1,6 @@
 """
 Brute Force (Exact) Solver for TSP.
-Only suitable for small instances (typically < 12 cities).
+Only suitable for small instances (typically < 20 cities).
 """
 
 import itertools
@@ -32,7 +32,7 @@ class ExactSolver:
         if n < 2:
             return [0], 0.0, [0.0]
         
-        if n > 15:
+        if n > 20:
             print(f"Warning: Brute force is too slow for {n} cities. Consider using heuristic methods.")
             return None, float('inf'), []
         
