@@ -66,7 +66,7 @@ python compute_exact_solutions.py
 This script:
 - Calculates optimal solutions using brute force for all instances (where feasible)
 - Saves results to `data/exact_solutions.json`
-- Only computes for instances with ≤12 cities (larger instances marked as "too_large")
+- Only computes for instances with ≤21 cities (larger instances marked as "too_large")
 
 **Note:** This step is optional but recommended. If skipped, approximation ratios will show as "N/A" in results.
 
@@ -104,7 +104,7 @@ python main.py
 ### 1. Exact Solver (Brute Force)
 - **Method**: Tries all possible permutations
 - **Complexity**: O(n!)
-- **Use Case**: Only suitable for small instances (< 12 cities)
+- **Use Case**: Only suitable for small instances (≤21 cities)
 - **Guarantee**: Finds optimal solution
 
 ### 2. ACO (Ant Colony Optimization)

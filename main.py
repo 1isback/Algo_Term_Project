@@ -317,10 +317,11 @@ def run_experiments():
         cities = map_instance.cities
         print(f"  Loaded {len(cities)} cities")
         
-        # Get exact solution from loaded data
+        # Get exact solution from loaded data or compute if needed
         exact_optimal = None
         exact_tour = None
         exact_time = None
+        n = len(cities)
         
         if instance_key in exact_solutions:
             exact_data = exact_solutions[instance_key]
@@ -329,45 +330,90 @@ def run_experiments():
                 exact_tour = exact_data.get("optimal_tour")
                 exact_time = exact_data.get("computation_time", 0.0)
                 print(f"\n✓ Using pre-computed exact solution: {exact_optimal:.2f}")
-                
-                # Add exact solver result to results
-                all_results.append({
-                    "solver": "Exact (Brute Force)",
-                    "instance": instance_name,
-                    "num_runs": 1,
-                    "distances": [exact_optimal],
-                    "times": [exact_time],
-                    "tours": [exact_tour] if exact_tour else [[]],
-                    "histories": [[]],
-                    "best_tour": exact_tour if exact_tour else [],
-                    "best_distance": exact_optimal,
-                    "best_time": exact_time,
-                    "best_history": [],
-                    "stats": {
-                        "mean_distance": exact_optimal,
-                        "std_distance": 0.0,
-                        "min_distance": exact_optimal,
-                        "max_distance": exact_optimal,
-                        "mean_time": exact_time,
-                        "std_time": 0.0
-                    },
-                    "approximation_ratio": 1.0
-                })
-                
-                # Plot exact solution if tour is available
-                if exact_tour:
-                    os.makedirs("results/plots", exist_ok=True)
-                    plot_path = f"results/plots/exact_{instance_key}.png"
-                    plot_tour(cities, exact_tour,
-                              title=f"Exact Solver - {instance_name}\nOptimal Distance: {exact_optimal:.2f}",
-                              save_path=plot_path, show=False)
             elif exact_data.get("status") == "too_large":
                 print(f"\n⚠ Instance too large for exact solver (optimal not available)")
             else:
-                print(f"\n⚠ Exact solution not available for this instance")
+                # Try to compute if instance is small enough
+                if n <= 21:
+                    print(f"\n⚠ Pre-computed exact solution failed, computing now with optimized exact solver...")
+                    solver = ExactSolver()
+                    start_time = time.time()
+                    result = solver.solve(cities)
+                    elapsed_time = time.time() - start_time
+                    
+                    if len(result) == 3:
+                        tour, distance, _ = result
+                    else:
+                        tour, distance = result
+                    
+                    if tour is not None:
+                        exact_optimal = distance
+                        exact_tour = tour
+                        exact_time = elapsed_time
+                        print(f"  ✓ Computed exact solution: {exact_optimal:.2f} (Time: {exact_time:.2f}s)")
+                    else:
+                        print(f"  ✗ Failed to compute exact solution")
+                else:
+                    print(f"\n⚠ Exact solution not available for this instance")
         else:
-            print(f"\n⚠ Exact solution not found in data/exact_solutions.json")
-            print(f"  Run 'python compute_exact_solutions.py' to compute exact solutions")
+            # Exact solution not in file, compute if instance is small enough
+            if n <= 21:
+                print(f"\n⚠ Exact solution not found in data/exact_solutions.json")
+                print(f"  Computing with optimized exact solver...")
+                solver = ExactSolver()
+                start_time = time.time()
+                result = solver.solve(cities)
+                elapsed_time = time.time() - start_time
+                
+                if len(result) == 3:
+                    tour, distance, _ = result
+                else:
+                    tour, distance = result
+                
+                if tour is not None:
+                    exact_optimal = distance
+                    exact_tour = tour
+                    exact_time = elapsed_time
+                    print(f"  ✓ Computed exact solution: {exact_optimal:.2f} (Time: {exact_time:.2f}s)")
+                else:
+                    print(f"  ✗ Failed to compute exact solution")
+            else:
+                print(f"\n⚠ Exact solution not found in data/exact_solutions.json")
+                print(f"  Instance too large ({n} cities, max 21) to compute exact solution")
+                print(f"  Run 'python compute_exact_solutions.py' to pre-compute exact solutions for smaller instances")
+        
+        # Add exact solver result to results if we have it
+        if exact_optimal is not None:
+            all_results.append({
+                "solver": "Exact (Brute Force)",
+                "instance": instance_name,
+                "num_runs": 1,
+                "distances": [exact_optimal],
+                "times": [exact_time],
+                "tours": [exact_tour] if exact_tour else [[]],
+                "histories": [[]],
+                "best_tour": exact_tour if exact_tour else [],
+                "best_distance": exact_optimal,
+                "best_time": exact_time,
+                "best_history": [],
+                "stats": {
+                    "mean_distance": exact_optimal,
+                    "std_distance": 0.0,
+                    "min_distance": exact_optimal,
+                    "max_distance": exact_optimal,
+                    "mean_time": exact_time,
+                    "std_time": 0.0
+                },
+                "approximation_ratio": 1.0
+            })
+            
+            # Plot exact solution if tour is available
+            if exact_tour:
+                os.makedirs("results/plots", exist_ok=True)
+                plot_path = f"results/plots/exact_{instance_key}.png"
+                plot_tour(cities, exact_tour,
+                          title=f"Exact Solver - {instance_name}\nOptimal Distance: {exact_optimal:.2f}",
+                          save_path=plot_path, show=False)
         
         # Run ACO Solver (multiple runs)
         print("\nRunning ACO Solver...")

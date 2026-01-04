@@ -1,6 +1,6 @@
 """
 Brute Force (Exact) Solver for TSP.
-Only suitable for small instances (typically < 20 cities).
+Only suitable for small instances (typically ≤ 21 cities).
 """
 
 import itertools
