@@ -51,11 +51,11 @@ python main.py --generate
 ```
 
 This creates three JSON files in the `data/` directory:
-- `small_instances.json` (10 cities)
+- `small_instances.json` (20 cities)
 - `medium_instances.json` (50 cities)
 - `large_instances.json` (100 cities)
 
-### Step 2: Compute Exact Solutions (Optional but Recommended)
+### Step 2: Compute Exact Solutions (Recommended)
 
 Compute exact optimal solutions for approximation ratio calculations:
 
@@ -120,12 +120,13 @@ python main.py
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
-| `num_ants` | 50 | Number of ants per iteration |
+| `num_ants` | 30 | Number of ants per iteration |
 | `alpha` | 1.0 | Pheromone importance (higher = more influence) |
-| `beta` | 2.0 | Heuristic importance (higher = prefer shorter edges) |
+| `beta` | 3.0 | Heuristic importance (higher = prefer shorter edges) |
 | `evaporation_rate` | 0.5 | Rate at which pheromone evaporates (0-1) |
 | `q` | 100.0 | Pheromone deposit constant |
 | `max_iterations` | 100 | Maximum number of iterations |
+| `elitist_weight` | 2.0 | Elitist strategy weight |
 
 **Parameter Tuning Tips**:
 - Higher `alpha`: More exploitation (follow existing trails)
@@ -144,10 +145,10 @@ python main.py
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
-| `initial_temperature` | 1000.0 | Starting temperature |
-| `cooling_rate` | 0.995 | Temperature reduction factor per iteration |
-| `min_temperature` | 0.1 | Minimum temperature (stopping criterion) |
-| `max_iterations` | 10000 | Maximum number of iterations |
+| `initial_temperature` | 5000.0 | Starting temperature |
+| `cooling_rate` | 0.9995 | Temperature reduction factor per iteration |
+| `min_temperature` | 0.001 | Minimum temperature (stopping criterion) |
+| `max_iterations` | 50000 | Maximum number of iterations |
 
 **Parameter Tuning Tips**:
 - Higher `initial_temperature`: More exploration early on
@@ -236,6 +237,7 @@ python -m pytest tests/
 - Python 3.7+
 - numpy >= 1.21.0
 - matplotlib >= 3.5.0
+- pulp
 
 ## Project Context
 
@@ -252,3 +254,10 @@ This project is for educational purposes.
 ## Citation
 
 If you use this code in your research or project, please cite appropriately.
+"""
+
+Bersun Ustuner
+Yusuf Efe Erer
+Zeynep Rana Secen
+
+"""
